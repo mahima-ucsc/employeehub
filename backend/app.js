@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const cookieParser = require('cookie-parser');
 
+const connectDb = require('./db');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
@@ -22,7 +23,6 @@ app.use(cookieParser());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -31,6 +31,7 @@ const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
+    await connectDb(process.env.CONNECTION_STRING);
     app.listen(port, () => {
       console.log(`Server is listening on port ${port}...`);
     });
