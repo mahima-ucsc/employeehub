@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const EmployeeSchema = new Schema({
-  name: {
+  firstName: {
     type: String,
     required: [true, 'Firstname cannot be empty.'],
     minlength: 2,
