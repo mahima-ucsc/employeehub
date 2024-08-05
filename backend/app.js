@@ -1,21 +1,42 @@
-require("dotenv").config();
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const express = require('express');
+const app = express();
+require('dotenv').config();
+require('express-async-errors');
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+const morgan = require('morgan');
 
-var app = express();
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const cookieParser = require('cookie-parser');
 
-app.use(logger("dev"));
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'));
+}
+app.use(express.json());
+app.use(helmet());
+app.use(mongoSanitize());
+app.use(cookieParser());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
-module.exports = app;
+const port = process.env.PORT || 3000;
+
+const start = async () => {
+  try {
+    app.listen(port, () => {
+      console.log(`Server is listening on port ${port}...`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
