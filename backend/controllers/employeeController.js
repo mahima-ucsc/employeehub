@@ -1,6 +1,7 @@
 const { Employee } = require('../models');
-const { BadRequestError, StatusCodes } = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const { attachCookie } = require('../utils');
+const { BadRequestError } = require('../errors');
 
 const register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;

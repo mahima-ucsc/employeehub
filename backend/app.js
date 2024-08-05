@@ -10,8 +10,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const cookieParser = require('cookie-parser');
 
 const connectDb = require('./db');
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+
+const { employeesRouter } = require('./routes');
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
@@ -24,8 +24,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api/employees', employeesRouter);
 
 const port = process.env.PORT || 3000;
 
