@@ -1,3 +1,7 @@
+const authRouter = require('./auth');
+const employeesRouter = require('./employees');
+
 module.exports = {
-  employeesRouter: require('./employees'),
+  authRouter,
+  employeesRouter,
 };

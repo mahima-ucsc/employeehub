@@ -3,8 +3,8 @@ const {
   employeeController: { register },
 } = require('../controllers');
 
-const router = Router();
+const employeesRouter = Router();
 
-router.route('/register').post(register);
+employeesRouter.route('/register').post(register);
 
-module.exports = router;
+module.exports = employeesRouter;
