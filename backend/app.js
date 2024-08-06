@@ -12,7 +12,10 @@ const cookieParser = require('cookie-parser');
 const connectDb = require('./db');
 
 const { employeesRouter } = require('./routes');
-const { errorHandlerMiddleware } = require('./middlewear');
+const {
+  errorHandlerMiddleware,
+  routeNotFoundMiddlewear,
+} = require('./middlewear');
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
@@ -28,6 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api/employees', employeesRouter);
 
 app.use(errorHandlerMiddleware);
+app.use(routeNotFoundMiddlewear);
 
 const port = process.env.PORT || 3000;
 
