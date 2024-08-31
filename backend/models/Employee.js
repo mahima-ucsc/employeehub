@@ -33,6 +33,10 @@ const EmployeeSchema = new Schema({
     minlength: 6,
     select: false,
   },
+  userRole: {
+    type: String,
+    required: [true, 'User role error'],
+  },
 });
 
 EmployeeSchema.pre('save', async function () {
@@ -42,9 +46,13 @@ EmployeeSchema.pre('save', async function () {
 });
 
 EmployeeSchema.methods.createJWT = function () {
-  return jwt.sign({ employeeId: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_LIFETIME,
-  });
+  return jwt.sign(
+    { employeeId: this._id, role: this.userRole },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_LIFETIME,
+    },
+  );
 };
 
 EmployeeSchema.methods.comparePassword = async function (candidatePassword) {
