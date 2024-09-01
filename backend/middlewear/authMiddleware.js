@@ -25,3 +25,14 @@ module.exports.adminAuthorizationMiddleware = async (req, res, next) => {
   }
   next();
 };
+
+module.exports.adminOrSelfAuthorizationMiddleware = async (req, res, next) => {
+  const user = await Employee.findOne({ _id: req.user.userId });
+  if (
+    user?.userRole != userRoles.admin &&
+    req.user.userId !== req.params.userId
+  ) {
+    throw new UnauthorizedError('Not enough permissions');
+  }
+  next();
+};

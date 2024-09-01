@@ -37,7 +37,22 @@ const getAllEmployees = async (req, res) => {
   res.status(StatusCodes.OK).json(emps);
 };
 
+const getEmployee = async (req, res) => {
+  let result = await Employee.findOne({
+    _id: req.params.userId,
+  });
+
+  let emp = {
+    email: result.email,
+    firstName: result.firstName,
+    lastName: result.lastName,
+    role: result.userRole,
+  };
+  res.status(StatusCodes.OK).json(emp);
+};
+
 module.exports = {
   register,
+  getEmployee,
   getAllEmployees,
 };
