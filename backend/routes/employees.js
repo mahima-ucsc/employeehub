@@ -5,6 +5,7 @@ const {
 const {
   getAllEmployees,
   getEmployee,
+  updateRole,
 } = require('../controllers/employeeController');
 const { adminAuthorizationMiddleware } = require('../middlewear');
 const {
@@ -18,5 +19,8 @@ employeesRouter.route('/register').post(register);
 employeesRouter
   .route('/:userId')
   .get(adminOrSelfAuthorizationMiddleware, getEmployee);
+employeesRouter
+  .route('/:userId/role')
+  .patch(adminAuthorizationMiddleware, updateRole);
 
 module.exports = employeesRouter;

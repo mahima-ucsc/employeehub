@@ -35,6 +35,7 @@ const EmployeeSchema = new Schema({
   },
   userRole: {
     type: String,
+    enum: ['admin', 'employee'],
     required: [true, 'User role error'],
   },
 });

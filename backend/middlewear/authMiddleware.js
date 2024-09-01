@@ -3,7 +3,7 @@ const { UnauthenticatedError, UnauthorizedError } = require('../errors');
 const { Employee } = require('../models');
 const { userRoles } = require('../constants');
 
-module.exports.authenticationMidddleware = (req, res, next) => {
+const authenticationMidddleware = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
     throw new UnauthenticatedError('Authentication Invalid');
@@ -18,7 +18,7 @@ module.exports.authenticationMidddleware = (req, res, next) => {
   }
 };
 
-module.exports.adminAuthorizationMiddleware = async (req, res, next) => {
+const adminAuthorizationMiddleware = async (req, res, next) => {
   const user = await Employee.findOne({ _id: req.user.userId });
   if (user?.userRole != userRoles.admin) {
     throw new UnauthorizedError('Not enough permissions');
@@ -26,7 +26,7 @@ module.exports.adminAuthorizationMiddleware = async (req, res, next) => {
   next();
 };
 
-module.exports.adminOrSelfAuthorizationMiddleware = async (req, res, next) => {
+const adminOrSelfAuthorizationMiddleware = async (req, res, next) => {
   const user = await Employee.findOne({ _id: req.user.userId });
   if (
     user?.userRole != userRoles.admin &&
@@ -35,4 +35,10 @@ module.exports.adminOrSelfAuthorizationMiddleware = async (req, res, next) => {
     throw new UnauthorizedError('Not enough permissions');
   }
   next();
+};
+
+module.exports = {
+  authenticationMidddleware,
+  adminAuthorizationMiddleware,
+  adminOrSelfAuthorizationMiddleware,
 };

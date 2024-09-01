@@ -2,6 +2,8 @@ const { Employee } = require('../models');
 const { StatusCodes } = require('http-status-codes');
 const { attachCookie } = require('../utils');
 const { userRoles } = require('../constants');
+const { NotFoundError } = require('../errors');
+const { default: mongoose } = require('mongoose');
 
 const register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -38,6 +40,9 @@ const getAllEmployees = async (req, res) => {
 };
 
 const getEmployee = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.userId))
+    throw new NotFoundError('Invalid user id.');
+
   let result = await Employee.findOne({
     _id: req.params.userId,
   });
@@ -51,8 +56,23 @@ const getEmployee = async (req, res) => {
   res.status(StatusCodes.OK).json(emp);
 };
 
+const updateRole = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.userId))
+    throw new NotFoundError('Invalid user id.');
+  let user = await Employee.findOne({
+    _id: req.params.userId,
+  });
+
+  if (!user) throw new NotFoundError('Invalid user id.');
+
+  user.userRole = req.body.role;
+  await user.save();
+  res.status(StatusCodes.OK).send();
+};
+
 module.exports = {
   register,
   getEmployee,
   getAllEmployees,
+  updateRole,
 };
