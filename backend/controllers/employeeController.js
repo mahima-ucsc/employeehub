@@ -34,6 +34,7 @@ const getAllEmployees = async (req, res) => {
     firstName: emp.firstName,
     lastName: emp.lastName,
     role: emp.userRole,
+    id: emp._id,
   }));
 
   res.status(StatusCodes.OK).json(emps);
@@ -52,6 +53,7 @@ const getEmployee = async (req, res) => {
     firstName: result.firstName,
     lastName: result.lastName,
     role: result.userRole,
+    id: result._id,
   };
   res.status(StatusCodes.OK).json(emp);
 };
