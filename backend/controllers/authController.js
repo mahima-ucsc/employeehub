@@ -19,7 +19,13 @@ const login = async (req, res) => {
   }
   const token = employee.createJWT();
   attachCookie({ res, token });
-  res.status(StatusCodes.OK).send();
+  res.status(StatusCodes.OK).json({
+    id: employee._id,
+    firstName: employee.firstName,
+    lastName: employee.lastName,
+    email: employee.email,
+    role: employee.userRole,
+  });
 };
 
 module.exports = { login };

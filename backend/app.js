@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 require('express-async-errors');
+var cors = require('cors');
 
 const morgan = require('morgan');
 
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(mongoSanitize());
 app.use(cookieParser());
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
