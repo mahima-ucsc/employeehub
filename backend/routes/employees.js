@@ -6,6 +6,7 @@ const {
   getAllEmployees,
   getEmployee,
   updateRole,
+  updateByUserId,
 } = require('../controllers/employeeController');
 const { adminAuthorizationMiddleware } = require('../middlewear');
 const {
@@ -22,6 +23,7 @@ employeesRouter
     adminAuthorizationMiddleware,
     getAllEmployees,
   );
+
 employeesRouter.route('/register').post(register);
 employeesRouter
   .route('/:userId')
@@ -29,6 +31,13 @@ employeesRouter
     authenticationMidddleware,
     adminOrSelfAuthorizationMiddleware,
     getEmployee,
+  );
+employeesRouter
+  .route('/:userId')
+  .patch(
+    authenticationMidddleware,
+    adminOrSelfAuthorizationMiddleware,
+    updateByUserId,
   );
 employeesRouter
   .route('/:userId/role')

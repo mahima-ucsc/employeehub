@@ -72,9 +72,26 @@ const updateRole = async (req, res) => {
   res.status(StatusCodes.OK).send();
 };
 
+const updateByUserId = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.userId))
+    throw new NotFoundError('Invalid user id.');
+  let user = await Employee.findOne({
+    _id: req.params.userId,
+  });
+
+  if (!user) throw new NotFoundError('Invalid user id.');
+
+  user.firstName = req.body.firstName || user.firstName;
+  user.lastName = req.body.lastName || user.lastName;
+  user.email = req.body.email || user.email;
+  await user.save();
+  res.status(StatusCodes.OK).send();
+};
+
 module.exports = {
   register,
   getEmployee,
   getAllEmployees,
   updateRole,
+  updateByUserId,
 };
