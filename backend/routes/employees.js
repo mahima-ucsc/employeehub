@@ -10,17 +10,28 @@ const {
 const { adminAuthorizationMiddleware } = require('../middlewear');
 const {
   adminOrSelfAuthorizationMiddleware,
+  authenticationMidddleware,
 } = require('../middlewear/authMiddleware');
 
 const employeesRouter = Router();
 
-employeesRouter.route('/').get(adminAuthorizationMiddleware, getAllEmployees);
+employeesRouter
+  .route('/')
+  .get(
+    authenticationMidddleware,
+    adminAuthorizationMiddleware,
+    getAllEmployees,
+  );
 employeesRouter.route('/register').post(register);
 employeesRouter
   .route('/:userId')
-  .get(adminOrSelfAuthorizationMiddleware, getEmployee);
+  .get(
+    authenticationMidddleware,
+    adminOrSelfAuthorizationMiddleware,
+    getEmployee,
+  );
 employeesRouter
   .route('/:userId/role')
-  .patch(adminAuthorizationMiddleware, updateRole);
+  .patch(authenticationMidddleware, adminAuthorizationMiddleware, updateRole);
 
 module.exports = employeesRouter;
