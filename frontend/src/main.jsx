@@ -2,9 +2,10 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "normalize.css";
 import "./main.css";
+import "react-toastify/dist/ReactToastify.css";
 import { RouterProvider } from "react-router-dom";
 import routerConfig from "./router.config";
-import { ToastContainer } from "react-toastify";
+import { Slide, ToastContainer } from "react-toastify";
 // import App from "./App.jsx";
 // import { AppProvider } from "./context/appContext.jsx";
 
@@ -15,11 +16,13 @@ createRoot(document.getElementById("root")).render(
     </AppProvider> */}
     <RouterProvider router={routerConfig} />
     <ToastContainer
-      autoClose={3000}
-      closeOnClick={false}
-      closeButton={false}
-      hideProgressBar
-      position="bottom-center"
+      position="bottom-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      pauseOnHover
+      transition={Slide}
     />
   </StrictMode>
 );
