@@ -39,6 +39,9 @@ const Login = () => {
         login(user);
         toast.success("Logged in successfully!");
       },
+      onError: (err) => {
+        toast.error(err.response.data.msg);
+      },
     });
   };
   return (

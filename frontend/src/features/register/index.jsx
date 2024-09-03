@@ -39,6 +39,9 @@ const Register = () => {
         login(user);
         toast.success("Registered successfully!");
       },
+      onError: (err) => {
+        toast.error(err.response.data.msg);
+      },
     });
   };
   return (
