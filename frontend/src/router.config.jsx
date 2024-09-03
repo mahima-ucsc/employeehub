@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
 import App from "./App";
 import { useAuth } from "./common/hooks";
 import Login from "./features/login";
+import Register from "./features/register";
 
 function ProtectedLayout() {
   const { user } = useAuth();
@@ -38,6 +39,14 @@ export default createBrowserRouter([
         element: (
           <OnlyIfUnauthenticatedWrapper>
             <Login />
+          </OnlyIfUnauthenticatedWrapper>
+        ),
+      },
+      {
+        path: "register",
+        element: (
+          <OnlyIfUnauthenticatedWrapper>
+            <Register />
           </OnlyIfUnauthenticatedWrapper>
         ),
       },

@@ -10,18 +10,18 @@ import {
   Logo,
   RegisterAndLoginWrapper,
 } from "../../common/components";
-import { useLogin } from "./hooks";
 import { toast } from "react-toastify";
 import { useAuth } from "../../common/hooks";
-import { loginSchema } from "./schema";
+import { registerSchema } from "./schema";
+import { useRegister } from "./hooks";
 
 const Button = styled.button.attrs({
   className: "btn btn-block form-btn",
   type: "submit",
 })``;
 
-const Login = () => {
-  const { mutate: proceedLogin } = useLogin();
+const Register = () => {
+  const { mutate: proceedRegister } = useRegister();
   const { login } = useAuth();
 
   const {
@@ -30,14 +30,14 @@ const Login = () => {
     formState: { errors },
   } = useForm({
     mode: "onChange",
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(registerSchema),
   });
 
   const onSubmit = (data) => {
-    proceedLogin(data, {
+    proceedRegister(data, {
       onSuccess: ({ data: user }) => {
         login(user);
-        toast.success("Logged in successfully!");
+        toast.success("Registered successfully!");
       },
     });
   };
@@ -45,8 +45,18 @@ const Login = () => {
     <RegisterAndLoginWrapper>
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <Logo />
-        <h4>login</h4>
+        <h4>Register</h4>
 
+        <FormRow>
+          <Label htmlFor="firstName">First Name</Label>
+          <Input type="text" name="firstName" {...register("firstName")} />
+          <FormErrorMsg>{errors.firstName?.message}</FormErrorMsg>
+        </FormRow>
+        <FormRow>
+          <Label htmlFor="lastName">Last Name</Label>
+          <Input type="text" name="lastName" {...register("lastName")} />
+          <FormErrorMsg>{errors.lastName?.message}</FormErrorMsg>
+        </FormRow>
         <FormRow>
           <Label htmlFor="email">Email</Label>
           <Input type="email" name="email" {...register("email")} />
@@ -59,13 +69,13 @@ const Login = () => {
         </FormRow>
         <Button>Submit</Button>
         <p>
-          Not a member yet?
-          <Link to="/register" className="member-btn">
-            Register
+          Already a member?
+          <Link to="/login" className="member-btn">
+            Login
           </Link>
         </p>
       </form>
     </RegisterAndLoginWrapper>
   );
 };
-export default Login;
+export default Register;
