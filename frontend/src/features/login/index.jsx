@@ -1,9 +1,18 @@
-import { Link, Form } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { FormRow, Logo } from "../../common/components";
-import { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  FormErrorMsg,
+  FormRow,
+  Input,
+  Label,
+  Logo,
+} from "../../common/components";
 import { useLogin } from "./hooks";
 import { toast } from "react-toastify";
+import { useAuth } from "../../common/hooks";
+import { loginSchema } from "./schema";
 
 const Wrapper = styled.section`
   min-height: 100vh;
@@ -37,63 +46,56 @@ const Wrapper = styled.section`
   }
 `;
 
-const initialState = {
-  email: "",
-  password: "",
-};
+const Button = styled.button.attrs({
+  className: "btn btn-block form-btn",
+  type: "submit",
+})``;
 
 const Login = () => {
-  const [values, setValues] = useState(initialState);
   const { mutate: proceedLogin } = useLogin();
+  const { login } = useAuth();
 
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    proceedLogin(values, {
-      onSuccess: (result) => {
-        console.log(result);
-        toast.success("Login successfully!");
-      },
-      onError: (err) => {
-        console.log(err);
-        console.log("yo");
-        toast.error("Please check email and password again!");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(loginSchema),
+  });
+
+  const onSubmit = (data) => {
+    proceedLogin(data, {
+      onSuccess: ({ data: user }) => {
+        login(user);
+        toast.success("Logged in successfully!");
       },
     });
   };
   return (
     <Wrapper>
-      <Form className="form">
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <Logo />
         <h4>login</h4>
-        <FormRow
-          type="email"
-          name="email"
-          value={values.email}
-          handleChange={handleChange}
-        />
-        <FormRow
-          type="password"
-          name="password"
-          value={values.password}
-          handleChange={handleChange}
-        />
-        <button
-          type="button"
-          className={`btn btn-block form-btn`}
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
+
+        <FormRow>
+          <Label htmlFor="email">Email</Label>
+          <Input type="email" name="email" {...register("email")} />
+          <FormErrorMsg>{errors.email?.message}</FormErrorMsg>
+        </FormRow>
+        <FormRow>
+          <Label htmlFor="password">Password</Label>
+          <Input type="password" name="password" {...register("password")} />
+          <FormErrorMsg>{errors.password?.message}</FormErrorMsg>
+        </FormRow>
+        <Button>Submit</Button>
         <p>
           Not a member yet?
           <Link to="/register" className="member-btn">
             Register
           </Link>
         </p>
-      </Form>
+      </form>
     </Wrapper>
   );
 };
