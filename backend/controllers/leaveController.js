@@ -21,6 +21,28 @@ const createLeave = async (req, res) => {
   });
 };
 
+const getAllLeaves = async (req, res) => {
+  let results = await Leave.find();
+  if(!results || results.length === 0 ){
+    return res
+    .stats(StatusCodes.NOT_FOUND)
+    .json({message : "no leaves found."})
+  }
+  let leaves = results.map((leave) => ({
+      leaveId: leave._id,
+      startDate: leave.startDate,
+      endDate: leave.endDate,
+      description:leave.description,
+      status:leave.status,
+      employee:leave.employee,
+    
+    
+  }));
+
+  res.status(StatusCodes.OK).json(leaves);
+};
+
 module.exports = {
   createLeave,
+  getAllLeaves
 };
