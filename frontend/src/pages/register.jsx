@@ -5,18 +5,18 @@ import { useNavigate } from "react-router-dom";
 import { RegisterPageWrapper } from "../assets/wrappers";
 
 const initialState = {
-  firstname: "",
-  lastname: "",
+  firstName: "",
+  lastName: "",
   email: "",
   password: "",
   isMember: true,
 };
 
 const Register = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const [values, setValues] = useState(initialState);
-  const { user, isLoading, showAlert, displayAlert, setupUser } =
-    useAppContext();
+  const { isLoading, showAlert, displayAlert, setupUser } = useAppContext();
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
@@ -27,12 +27,17 @@ const Register = () => {
   };
   const onSubmit = (e) => {
     e.preventDefault();
-    const { firstname, lastname, email, password, isMember } = values;
-    if (!email || !password || (!isMember && (!firstname || !lastname))) {
+    const { firstName, lastName, email, password, isMember } = values;
+    if (!email || !password || (!isMember && (!firstName || !lastName))) {
       displayAlert();
       return;
     }
-    const currentUser = { firstname, lastname, email, password };
+    const currentUser = {
+      firstname: firstName,
+      lastname: lastName,
+      email,
+      password,
+    };
     if (isMember) {
       setupUser({
         currentUser,
@@ -42,17 +47,18 @@ const Register = () => {
     } else {
       setupUser({
         currentUser,
-        endPoint: "register",
+        endPoint: "employee/register",
         alertText: "User Created! Redirecting...",
       });
     }
   };
 
   useEffect(() => {
-    if (user) {
+    console.log("yo", user);
+    if (user?.id) {
       setTimeout(() => {
         navigate("/");
-      }, 2500);
+      }, 500);
     }
   }, [user, navigate]);
 
@@ -66,9 +72,9 @@ const Register = () => {
         {!values.isMember && (
           <FormRow
             type="text"
-            name="firstname"
+            name="firstName"
             labelText="First Name"
-            value={values.firstname}
+            value={values.firstName}
             handleChange={handleChange}
           />
         )}
@@ -77,9 +83,9 @@ const Register = () => {
         {!values.isMember && (
           <FormRow
             type="text"
-            name="lastname"
+            name="lastName"
             labelText="Last Name"
-            value={values.lastname}
+            value={values.lastName}
             handleChange={handleChange}
           />
         )}

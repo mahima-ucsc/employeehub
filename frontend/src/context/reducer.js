@@ -1,4 +1,10 @@
-import { CLEAR_ALERT, DISPLAY_ALERT } from "./actions";
+import {
+  CLEAR_ALERT,
+  DISPLAY_ALERT,
+  SETUP_USER_BEGIN,
+  SETUP_USER_ERROR,
+  SETUP_USER_SUCCESS,
+} from "./actions";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -18,6 +24,27 @@ const reducer = (state, action) => {
         alertText: "",
       };
 
+    case SETUP_USER_BEGIN:
+      return { ...state, isLoading: true };
+
+    case SETUP_USER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        user: action.payload.user,
+        showAlert: true,
+        alertType: "success",
+        alertText: action.payload.alertText,
+      };
+
+    case SETUP_USER_ERROR:
+      return {
+        ...state,
+        isLoading: false,
+        showAlert: true,
+        alertType: "danger",
+        alertText: action.payload.msg,
+      };
     default:
       return { ...state };
   }

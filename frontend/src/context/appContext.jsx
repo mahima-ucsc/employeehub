@@ -1,6 +1,13 @@
 import React, { useContext, useReducer } from "react";
 import reducer from "./reducer";
-import { CLEAR_ALERT, DISPLAY_ALERT } from "./actions";
+import {
+  CLEAR_ALERT,
+  DISPLAY_ALERT,
+  SETUP_USER_BEGIN,
+  SETUP_USER_ERROR,
+  SETUP_USER_SUCCESS,
+} from "./actions";
+import axios from "axios";
 
 const initialState = {
   userLoading: true,
@@ -8,7 +15,7 @@ const initialState = {
   showAlert: false,
   alertText: "",
   alertType: "",
-  user: null,
+  user: localStorage.getItem(),
 };
 
 const AppContext = React.createContext();
@@ -16,7 +23,48 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const setupUser = () => {};
+  // axios
+  const axiosInstance = axios.create({
+    baseURL: "http://localhost:3500/api/",
+  });
+
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      console.log(error.response); // TODO: Remove this line in production
+      if (error.response.status === 401) {
+        logoutUser();
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  const logoutUser = () => {
+    // TODO: Implement
+  };
+
+  const setupUser = async ({ currentUser, endPoint, alertText }) => {
+    dispatch({ type: SETUP_USER_BEGIN });
+    try {
+      const { data: user } = await axiosInstance.post(
+        `/${endPoint}`,
+        currentUser
+      );
+      localStorage.setItem("user", JSON.stringify(user));
+      dispatch({
+        type: SETUP_USER_SUCCESS,
+        payload: { user, alertText },
+      });
+    } catch (error) {
+      dispatch({
+        type: SETUP_USER_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
 
   const clearAlert = () => {
     setTimeout(() => {
