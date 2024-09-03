@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useContext, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = React.createContext();
 
@@ -10,7 +10,6 @@ export function AuthProvider({ children }) {
       : null
   );
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
   const login = (user) => {
     localStorage.setItem("user", JSON.stringify(user));
@@ -20,6 +19,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
+    navigate("/login", { replace: true });
   };
 
   const value = useMemo(
@@ -28,19 +28,9 @@ export function AuthProvider({ children }) {
       login,
       logout,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [user]
   );
-
-  useEffect(() => {
-    if (user === null) {
-      navigate("/login", { replace: true });
-    } else {
-      navigate(pathname === "/login" ? "/" : pathname, {
-        replace: true,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
