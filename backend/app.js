@@ -32,7 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api', authRouter);
-app.use('/api/employees', authenticationMidddleware, employeesRouter);
+app.use('/api/employees', employeesRouter);
 app.use('/api/leaves', authenticationMidddleware, leavesRouter);
 
 app.use(errorHandlerMiddleware);

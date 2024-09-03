@@ -1,7 +1,12 @@
 const { Router } = require('express');
-const { createLeave } = require('../controllers/leaveController');
+const {
+  createLeave,
+  getAllLeaves,
+  updateLeaveDateById,
+} = require('../controllers/leaveController');
 const {
   adminOrSelfAuthorizationMiddleware,
+  adminAuthorizationMiddleware,
 } = require('../middlewear/authMiddleware');
 
 const leavesRouter = new Router();
@@ -9,5 +14,11 @@ const leavesRouter = new Router();
 leavesRouter
   .route('/:userId')
   .post(adminOrSelfAuthorizationMiddleware, createLeave);
+
+leavesRouter.route('/').get(adminAuthorizationMiddleware, getAllLeaves);
+
+leavesRouter
+  .route('/:userId/:leaveId')
+  .patch(adminOrSelfAuthorizationMiddleware, updateLeaveDateById);
 
 module.exports = leavesRouter;
