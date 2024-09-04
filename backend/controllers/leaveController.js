@@ -29,7 +29,8 @@ const getAllLeaves = async (req, res) => {
     .json({message : "no leaves found."})
   }
   let leaves = results.map((leave) => ({
-    startDate: leave.startdate,
+    leaveId: leave._id,
+    startDate: leave.startDate,
     endDate: leave.endDate,
     description:leave.description,
     status:leave.status,
