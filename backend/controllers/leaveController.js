@@ -28,25 +28,16 @@ const getAllLeaves = async (req, res) => {
     .stats(StatusCodes.NOT_FOUND)
     .json({message : "no leaves found."})
   }
-  let leaves = results.map((leave) => {
-    const formattedstartDate = new Date(leave.startDate)
-      .toISOString()
-      .split('T')[0];
-    
-    const formattedendtDate = new Date(leave.endDate)
-      .toISOString()
-      .split('T')[0];  
-
-    return{
+  let leaves = results.map((leave) => ({
       leaveId: leave._id,
-      startDate: formattedstartDate,
-      endDate: formattedendtDate,
+      startDate: leave.startDate,
+      endDate: leave.endDate,
       description:leave.description,
       status:leave.status,
       employee:leave.employee,
-    }
     
-  });
+    
+  }));
 
   res.status(StatusCodes.OK).json(leaves);
 };
