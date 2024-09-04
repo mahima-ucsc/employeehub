@@ -5,6 +5,7 @@ import { useAuth } from "./common/hooks";
 import Login from "./features/login";
 import Register from "./features/register";
 import { DashboardLayout } from "./common/components";
+import Profile from "./features/profile";
 
 // eslint-disable-next-line no-unused-vars
 function ProtectedLayout() {
@@ -72,7 +73,7 @@ export default createBrowserRouter([
         children: [
           {
             index: true,
-            element: <h1>Profile</h1>,
+            element: <Profile />,
           },
           {
             path: "leaves",

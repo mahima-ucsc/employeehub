@@ -6,6 +6,7 @@ const useAxios = () => {
   const { user, logout } = useAuth();
 
   const instance = axios.create({
+    withCredentials: true,
     baseURL: "http://localhost:3500/api/",
   });
 
