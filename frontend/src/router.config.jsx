@@ -4,7 +4,9 @@ import App from "./App";
 import { useAuth } from "./common/hooks";
 import Login from "./features/login";
 import Register from "./features/register";
+import { DashboardLayout } from "./common/components";
 
+// eslint-disable-next-line no-unused-vars
 function ProtectedLayout() {
   const { user } = useAuth();
 
@@ -15,7 +17,7 @@ function ProtectedLayout() {
   return <Outlet />;
 }
 
-function OnlyIfUnauthenticatedWrapper({ children }) {
+function OnlyUnauthenticatedComponentWrapper({ children }) {
   const { user } = useAuth();
 
   if (user) {
@@ -25,6 +27,15 @@ function OnlyIfUnauthenticatedWrapper({ children }) {
   return children;
 }
 
+function OnlyAuthenticatedComponentWrapper({ children }) {
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Navigate to="/login" replace={true} />;
+  }
+
+  return children;
+}
 export default createBrowserRouter([
   {
     path: "/",
@@ -37,26 +48,39 @@ export default createBrowserRouter([
       {
         path: "login",
         element: (
-          <OnlyIfUnauthenticatedWrapper>
+          <OnlyUnauthenticatedComponentWrapper>
             <Login />
-          </OnlyIfUnauthenticatedWrapper>
+          </OnlyUnauthenticatedComponentWrapper>
         ),
       },
       {
         path: "register",
         element: (
-          <OnlyIfUnauthenticatedWrapper>
+          <OnlyUnauthenticatedComponentWrapper>
             <Register />
-          </OnlyIfUnauthenticatedWrapper>
+          </OnlyUnauthenticatedComponentWrapper>
         ),
       },
       {
         path: "dashboard",
-        element: <ProtectedLayout />,
+        // element: <ProtectedLayout />,
+        element: (
+          <OnlyAuthenticatedComponentWrapper>
+            <DashboardLayout />
+          </OnlyAuthenticatedComponentWrapper>
+        ),
         children: [
           {
             index: true,
-            element: <h1>Dashboard</h1>,
+            element: <h1>Profile</h1>,
+          },
+          {
+            path: "leaves",
+            element: <h1>Leaves</h1>,
+          },
+          {
+            path: "admin",
+            element: <h1>Admin Page</h1>,
           },
         ],
       },
