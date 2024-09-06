@@ -5,6 +5,7 @@ import { useAuth } from "./common/hooks";
 import Login from "./features/login";
 import Register from "./features/register";
 import { DashboardLayout } from "./common/components";
+import { Error } from "./common/components"
 import Profile from "./features/profile";
 
 // eslint-disable-next-line no-unused-vars
@@ -40,6 +41,7 @@ function OnlyAuthenticatedComponentWrapper({ children }) {
 export default createBrowserRouter([
   {
     path: "/",
+    errorElement : <Error />,
     element: <App />,
     children: [
       {
