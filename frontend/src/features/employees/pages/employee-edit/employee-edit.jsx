@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetEmployeeById, useUpdateEmployeeById } from "../../hooks";
 import {
   DashboardFormWrapper,
@@ -23,6 +23,7 @@ const EmployeeEdit = () => {
   const { userId } = useParams();
   const { data: employee, isLoading } = useGetEmployeeById(userId);
   const { mutate: updateEmployeeById } = useUpdateEmployeeById();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -40,6 +41,7 @@ const EmployeeEdit = () => {
       {
         onSuccess: () => {
           toast.success("Employee details updated successfully");
+          navigate("../employees");
         },
         onError: (err) => {
           toast.error(err.response.data.msg);
