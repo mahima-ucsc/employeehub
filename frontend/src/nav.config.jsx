@@ -1,5 +1,5 @@
 import { ImProfile, ImCalendar } from "react-icons/im";
-import { MdAdminPanelSettings } from "react-icons/md";
+import { MdPeople } from "react-icons/md";
 
 const links = [
   {
@@ -8,15 +8,15 @@ const links = [
     icon: <ImProfile />,
   },
   {
+    text: "employees",
+    path: "employees",
+    icon: <MdPeople />,
+    isAdminOnly: true,
+  },
+  {
     text: "leaves",
     path: "leaves",
     icon: <ImCalendar />,
-  },
-  {
-    text: "admin",
-    path: "admin",
-    icon: <MdAdminPanelSettings />,
-    isAdminOnly: true,
   },
 ];
 
