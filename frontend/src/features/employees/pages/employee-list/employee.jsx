@@ -58,7 +58,7 @@ const Wrapper = styled.article`
   }
 `;
 
-const Employee = ({ firstName, lastName, role, email }) => {
+const Employee = ({ firstName, lastName, role, email, id }) => {
   return (
     <Wrapper>
       <header>
@@ -70,7 +70,7 @@ const Employee = ({ firstName, lastName, role, email }) => {
         </div>
       </header>
       <footer className="actions">
-        <Link to={"update"} className="btn edit-btn">
+        <Link to={`${id}/edit`} className="btn edit-btn">
           Edit
         </Link>
         <button type="button" className="btn delete-btn">
