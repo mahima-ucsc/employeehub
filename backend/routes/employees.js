@@ -7,6 +7,7 @@ const {
   getEmployee,
   updateRole,
   updateByUserId,
+  deleteEmployeeById,
 } = require('../controllers/employeeController');
 const { adminAuthorizationMiddleware } = require('../middlewear');
 const {
@@ -34,6 +35,11 @@ employeesRouter
   );
 employeesRouter
   .route('/:userId')
+  .delete(
+    authenticationMidddleware,
+    adminOrSelfAuthorizationMiddleware,
+    deleteEmployeeById,
+  )
   .patch(
     authenticationMidddleware,
     adminOrSelfAuthorizationMiddleware,

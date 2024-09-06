@@ -97,10 +97,24 @@ const updateByUserId = async (req, res) => {
   });
 };
 
+const deleteEmployeeById = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.userId))
+    throw new NotFoundError('Invalid user id.');
+  let user = await Employee.findOne({
+    _id: req.params.userId,
+  });
+
+  if (!user) throw new NotFoundError('Invalid user id.');
+
+  user.deleteOne();
+  res.status(StatusCodes.OK).send();
+};
+
 module.exports = {
   register,
   getEmployee,
   getAllEmployees,
   updateRole,
   updateByUserId,
+  deleteEmployeeById,
 };
