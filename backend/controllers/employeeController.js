@@ -81,11 +81,20 @@ const updateByUserId = async (req, res) => {
 
   if (!user) throw new NotFoundError('Invalid user id.');
 
-  user.firstName = req.body.firstName || user.firstName;
-  user.lastName = req.body.lastName || user.lastName;
-  user.email = req.body.email || user.email;
-  await user.save();
-  res.status(StatusCodes.OK).send();
+  user.firstName = req.body.firstName;
+  user.lastName = req.body.lastName;
+  user.email = req.body.email;
+  if (req.body.password) {
+    user.password = req.body.password;
+  }
+  const result = await user.save();
+  res.status(StatusCodes.OK).json({
+    email: result.email,
+    firstName: result.firstName,
+    lastName: result.lastName,
+    role: result.userRole,
+    id: result._id,
+  });
 };
 
 module.exports = {
