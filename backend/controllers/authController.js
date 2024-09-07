@@ -28,4 +28,9 @@ const login = async (req, res) => {
   });
 };
 
-module.exports = { login };
+const logout = (req, res) => {
+  attachCookie({ res, token: 'logout' });
+  res.status(StatusCodes.OK).send();
+};
+
+module.exports = { login, logout };

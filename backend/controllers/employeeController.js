@@ -24,6 +24,7 @@ const register = async (req, res) => {
     lastName: employee.lastName,
     email: employee.email,
     role: employee.userRole,
+    id: employee._id,
   });
 };
 

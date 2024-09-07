@@ -45,12 +45,12 @@ const Wrapper = styled.div`
 `;
 
 const LogoutContainer = () => {
-  const logoutUser = () => {
-    // TODO: implement
-  };
-
   const [showLogout, setShowLogout] = useState(false);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  const logoutUser = () => {
+    logout();
+  };
 
   return (
     <Wrapper>
