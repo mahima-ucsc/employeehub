@@ -106,7 +106,7 @@ const deleteEmployeeById = async (req, res) => {
 
   if (!user) throw new NotFoundError('Invalid user id.');
 
-  user.deleteOne();
+  await user.deleteOne();
   res.status(StatusCodes.OK).send();
 };
 

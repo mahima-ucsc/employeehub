@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useDeleteEmployeeById } from "../../hooks";
+import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Wrapper = styled.article`
   background: var(--background-secondary-color);
@@ -59,6 +62,20 @@ const Wrapper = styled.article`
 `;
 
 const Employee = ({ firstName, lastName, role, email, id }) => {
+  const { mutate: deleteEmployeeById } = useDeleteEmployeeById();
+  const queryClient = useQueryClient();
+
+  const handleDelete = () => {
+    deleteEmployeeById(id, {
+      onSuccess: () => {
+        toast.success("Employee deleted successfully");
+        queryClient.invalidateQueries("employees");
+      },
+      onError: (err) => {
+        toast.error(err.response.data.msg);
+      },
+    });
+  };
   return (
     <Wrapper>
       <header>
@@ -73,7 +90,7 @@ const Employee = ({ firstName, lastName, role, email, id }) => {
         <Link to={`${id}/edit`} className="btn edit-btn">
           Edit
         </Link>
-        <button type="button" className="btn delete-btn">
+        <button type="button" className="btn delete-btn" onClick={handleDelete}>
           Delete
         </button>
       </footer>
