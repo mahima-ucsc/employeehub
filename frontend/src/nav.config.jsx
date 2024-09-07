@@ -17,6 +17,7 @@ const links = [
     text: "leaves",
     path: "leaves",
     icon: <ImCalendar />,
+    isAdminOnly: true,
   },
 ];
 
