@@ -10,6 +10,7 @@ import Profile from "./features/profile";
 import { EmployeeList } from "./features/employees/pages";
 import EmployeeEdit from "./features/employees/pages/employee-edit/employee-edit";
 import LeaveList from "./features/leaves/pages/leave-list/leave-list";
+import LeaveEdit from "./features/leaves/pages/leave-edit/leave-edit";
 
 // eslint-disable-next-line no-unused-vars
 function ProtectedLayout() {
@@ -91,6 +92,10 @@ export default createBrowserRouter([
           {
             path: "employees/:userId/edit",
             element: <EmployeeEdit />,
+          },
+          {
+            path: "leaves/:userId/:leaveId/edit",
+            element: <LeaveEdit />,
           },
         ],
       },
