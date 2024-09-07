@@ -3,6 +3,7 @@ const { leaveStatus } = require('../constants');
 const Leave = require('../models/Leave');
 const { default: mongoose } = require('mongoose');
 const { NotFoundError } = require('../errors');
+const { Employee } = require('../models');
 
 const createLeave = async (req, res) => {
   const { startDate, endDate, description } = req.body;
@@ -30,19 +31,26 @@ const getAllLeaves = async (req, res) => {
       .stats(StatusCodes.NOT_FOUND)
       .json({ message: 'no leaves found.' });
   }
-  let leaves = results.map((leave) => ({
-    leaveId: leave._id,
-    startDate: leave.startDate,
-    endDate: leave.endDate,
-    description: leave.description,
-    status: leave.status,
-    employee: leave.employee,
-  }));
+
+  let leaves = await Promise.all(
+    results.map(async (leave) => {
+      let user = await Employee.findOne({ _id: leave.employee });
+      return {
+        leaveId: leave._id,
+        startDate: leave.startDate,
+        endDate: leave.endDate,
+        description: leave.description,
+        status: leave.status,
+        employeeId: leave.employee,
+        employeeName: `${user.firstName} ${user.lastName}`,
+      };
+    }),
+  );
 
   res.status(StatusCodes.OK).json(leaves);
 };
 
-const getLeavesById = async (req, res) => {
+const getLeavesByEmployeeId = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.userId))
     throw new NotFoundError('Invalid user id.');
 
@@ -108,6 +116,6 @@ module.exports = {
   createLeave,
   getAllLeaves,
   updateLeaveDateById,
-  getLeavesById,
+  getLeavesById: getLeavesByEmployeeId,
   deleteLeaveById,
 };
