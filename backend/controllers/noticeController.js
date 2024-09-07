@@ -14,7 +14,18 @@ const createNotice = async (req, res) => {
     description: notice.description,
   });
 };
+const getNotices = async (req, res) => {
+  let results = await Notice.find();
+  let notices = results.map((notice) => ({
+    title: notice.title,
+    description: notice.description,
+    id: notice._id,
+  }));
+
+  res.status(StatusCodes.OK).json(notices);
+};
 
 module.exports = {
   createNotice,
+  getNotices,
 };
