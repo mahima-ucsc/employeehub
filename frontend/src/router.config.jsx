@@ -9,6 +9,7 @@ import { Error } from "./common/components";
 import Profile from "./features/profile";
 import { EmployeeList } from "./features/employees/pages";
 import EmployeeEdit from "./features/employees/pages/employee-edit/employee-edit";
+import LeaveList from "./features/leaves/pages/leave-list/leave-list";
 
 // eslint-disable-next-line no-unused-vars
 function ProtectedLayout() {
@@ -81,7 +82,7 @@ export default createBrowserRouter([
           },
           {
             path: "leaves",
-            element: <h1>Leaves</h1>,
+            element: <LeaveList/>,
           },
           {
             path: "employees",
