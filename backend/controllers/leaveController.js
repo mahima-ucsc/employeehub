@@ -26,11 +26,6 @@ const createLeave = async (req, res) => {
 
 const getAllLeaves = async (req, res) => {
   let results = await Leave.find();
-  if (!results || results.length === 0) {
-    return res
-      .stats(StatusCodes.NOT_FOUND)
-      .json({ message: 'no leaves found.' });
-  }
 
   let leaves = await Promise.all(
     results.map(async (leave) => {
@@ -58,19 +53,20 @@ const getLeavesByEmployeeId = async (req, res) => {
     employee: req.params.userId,
   });
 
-  if (!results || results.length === 0) {
-    return res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ message: 'No leaves found for this user.' });
-  }
-
-  let leaves = results.map((leave) => ({
-    leaveId: leave._id,
-    startDate: leave.startDate,
-    endDate: leave.endDate,
-    description: leave.description,
-    status: leave.status,
-  }));
+  let leaves = await Promise.all(
+    results.map(async (leave) => {
+      let user = await Employee.findOne({ _id: leave.employee });
+      return {
+        leaveId: leave._id,
+        startDate: leave.startDate,
+        endDate: leave.endDate,
+        description: leave.description,
+        status: leave.status,
+        employeeId: leave.employee,
+        employeeName: `${user.firstName} ${user.lastName}`,
+      };
+    }),
+  );
   res.status(StatusCodes.OK).json(leaves);
 };
 
