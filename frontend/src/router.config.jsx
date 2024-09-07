@@ -10,6 +10,7 @@ import Profile from "./features/profile";
 import { EmployeeList } from "./features/employees/pages";
 import EmployeeEdit from "./features/employees/pages/employee-edit/employee-edit";
 import LeaveList from "./features/leaves/pages/leave-list/leave-list";
+import LeaveEdit from "./features/leaves/pages/leave-edit/leave-edit";
 import MyLeaveList from "./features/myleaves/pages/my-leaves-list/my-leaves-list";
 
 // eslint-disable-next-line no-unused-vars
@@ -94,9 +95,15 @@ export default createBrowserRouter([
             element: <EmployeeEdit />,
           },
           {
+
+            path: "leaves/:userId/:leaveId/edit",
+            element: <LeaveEdit />,
+          },
+          {
             path: "myleaves",
             element: <MyLeaveList />,
           },
+
         ],
       },
     ],

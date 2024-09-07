@@ -3,6 +3,7 @@ const {
   createLeave,
   getAllLeaves,
   getLeavesById,
+  getLeaveByEmployeeId,
   updateLeaveDateById,
   deleteLeaveById,
 } = require('../controllers/leaveController');
@@ -30,5 +31,9 @@ leavesRouter
 leavesRouter
   .route('/:userId/:leaveId')
   .delete(adminOrSelfAuthorizationMiddleware, deleteLeaveById);
+
+leavesRouter
+  .route('/:userId/:leaveId')
+  .get(adminOrSelfAuthorizationMiddleware, getLeaveByEmployeeId);
 
 module.exports = leavesRouter;

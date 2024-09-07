@@ -49,7 +49,7 @@ const LeaveList = () => {
       <h5>Leaves</h5>
       <div className="leaves">
         {data
-          .filter((leave) => leave.employee !== user.id)
+          .filter((leave) => leave.employeeId !== user.id)
           .map((leave) => {
             return <Leave key={leave.leaveId} {...leave} />;
           })}

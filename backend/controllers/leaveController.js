@@ -70,6 +70,22 @@ const getLeavesByEmployeeId = async (req, res) => {
   res.status(StatusCodes.OK).json(leaves);
 };
 
+const getLeaveByEmployeeId = async (req, res) => {
+  if (
+    !mongoose.Types.ObjectId.isValid(req.params.userId) &&
+    !mongoose.Types.ObjectId.isValid(req.params.leaveId)
+  )
+    throw new NotFoundError('Invalid user id or leaveId.');
+  let leave = await Leave.findOne({
+    _id: req.params.leaveId,
+    employee: req.params.userId,
+  });
+
+  if (!leave) throw new NotFoundError('Leave not found for this user');
+
+  res.status(StatusCodes.OK).json(leave);
+};
+
 const updateLeaveDateById = async (req, res) => {
   if (
     !mongoose.Types.ObjectId.isValid(req.params.userId) &&
@@ -85,6 +101,7 @@ const updateLeaveDateById = async (req, res) => {
 
   leave.startDate = req.body.startDate || leave.startDate;
   leave.endDate = req.body.endDate || leave.endDate;
+  leave.description = req.body.description || leave.description;
 
   await leave.save();
   res.status(StatusCodes.OK).send();
@@ -113,5 +130,6 @@ module.exports = {
   getAllLeaves,
   updateLeaveDateById,
   getLeavesById: getLeavesByEmployeeId,
+  getLeaveByEmployeeId,
   deleteLeaveById,
 };

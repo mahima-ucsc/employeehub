@@ -4,8 +4,8 @@ import { useAxios } from "../../../common/hooks";
 const useUpdateLeaveById = () => {
   const { instance } = useAxios();
 
-  const updateLeaveById = ({ data, EmployeeId, LeaveId }) => {
-    return instance.patch(`leaves/${EmployeeId}/${LeaveId}`, data);
+  const updateLeaveById = ({ data, employeeId, leaveId }) => {
+    return instance.patch(`leaves/${employeeId}/${leaveId}`, data);
   };
 
   return useMutation({
