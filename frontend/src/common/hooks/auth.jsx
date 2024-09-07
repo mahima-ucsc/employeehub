@@ -1,9 +1,12 @@
 import React, { useContext, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useLogout from "./logout";
+import { toast } from "react-toastify";
 
 const AuthContext = React.createContext();
 
 export function AuthProvider({ children }) {
+  const { mutate: fetchLogout } = useLogout();
   const [user, setUser] = useState(
     localStorage.getItem("user")
       ? JSON.parse(localStorage.getItem("user"))
@@ -17,9 +20,19 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    navigate("/login", { replace: true });
+    fetchLogout(
+      {},
+      {
+        onSuccess: () => {
+          localStorage.removeItem("user");
+          setUser(null);
+          navigate("/login", { replace: true });
+        },
+        onError: (err) => {
+          toast.error(err.response.data.msg);
+        },
+      }
+    );
   };
 
   const value = useMemo(
