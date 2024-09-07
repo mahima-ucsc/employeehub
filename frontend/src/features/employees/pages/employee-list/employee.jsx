@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useDeleteEmployeeById } from "../../hooks";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
+import useChangeEmployeeRoleById from "../../hooks/change-role-employee";
 
 const Wrapper = styled.article`
   background: var(--background-secondary-color);
@@ -50,19 +51,22 @@ const Wrapper = styled.article`
     padding: 1.5rem;
   }
   .edit-btn,
+  .change-role-btn,
   .delete-btn {
     height: 30px;
     font-size: 0.85rem;
     display: flex;
     align-items: center;
   }
-  .edit-btn {
+  .edit-btn,
+  .delete-btn {
     margin-right: 0.5rem;
   }
 `;
 
 const Employee = ({ firstName, lastName, role, email, id }) => {
   const { mutate: deleteEmployeeById } = useDeleteEmployeeById();
+  const { mutate: changeEmployeeRoleById } = useChangeEmployeeRoleById();
   const queryClient = useQueryClient();
 
   const handleDelete = () => {
@@ -76,6 +80,22 @@ const Employee = ({ firstName, lastName, role, email, id }) => {
       },
     });
   };
+
+  const handleChangeRole = () => {
+    changeEmployeeRoleById(
+      { id, data: { role: role === "admin" ? "employee" : "admin" } },
+      {
+        onSuccess: () => {
+          toast.success("Employee role was changed successfully");
+          queryClient.invalidateQueries("employees");
+        },
+        onError: (err) => {
+          toast.error(err.response.data.msg);
+        },
+      }
+    );
+  };
+
   return (
     <Wrapper>
       <header>
@@ -92,6 +112,13 @@ const Employee = ({ firstName, lastName, role, email, id }) => {
         </Link>
         <button type="button" className="btn delete-btn" onClick={handleDelete}>
           Delete
+        </button>
+        <button
+          type="button"
+          className="btn change-role-btn"
+          onClick={handleChangeRole}
+        >
+          Change as an {role === "admin" ? "employee" : "admin"}
         </button>
       </footer>
     </Wrapper>
