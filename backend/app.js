@@ -12,7 +12,12 @@ const cookieParser = require('cookie-parser');
 
 const connectDb = require('./db');
 
-const { employeesRouter, authRouter, leavesRouter } = require('./routes');
+const {
+  employeesRouter,
+  authRouter,
+  leavesRouter,
+  noticesRouter,
+} = require('./routes');
 const {
   errorHandlerMiddleware,
   routeNotFoundMiddlewear,
@@ -39,6 +44,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/api', authRouter);
 app.use('/api/employees', employeesRouter);
 app.use('/api/leaves', authenticationMidddleware, leavesRouter);
+app.use('/api/notices', authenticationMidddleware, noticesRouter);
 
 app.use(errorHandlerMiddleware);
 app.use(routeNotFoundMiddlewear);
