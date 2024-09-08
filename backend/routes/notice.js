@@ -4,6 +4,7 @@ const {
   createNotice,
   getNotices,
   getNoticesById,
+  deleteAllNotices,
 } = require('../controllers/noticeController');
 
 const noticesRouter = Router();
@@ -11,9 +12,9 @@ const noticesRouter = Router();
 noticesRouter
   .route('/')
   .post(adminAuthorizationMiddleware, createNotice)
-  .get(getNotices);
+  .get(getNotices)
+  .delete(deleteAllNotices);
 
 noticesRouter.route('/:noticeId').get(getNoticesById);
 
 module.exports = noticesRouter;
-``;

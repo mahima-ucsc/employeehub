@@ -46,8 +46,21 @@ const getNoticesById = async (req, res) => {
   res.status(StatusCodes.OK).json(notice);
 };
 
+const deleteAllNotices = async (req, res) => {
+  if ((await Notice.countDocuments()) === 0) {
+    throw new NotFoundError('No notices found to delete.');
+  }
+
+  await Notice.deleteMany();
+
+  res
+    .status(StatusCodes.OK)
+    .json({ message: 'All notices have been deleted.' });
+};
+
 module.exports = {
   createNotice,
   getNotices,
   getNoticesById,
+  deleteAllNotices,
 };
