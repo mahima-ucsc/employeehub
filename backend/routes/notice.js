@@ -1,6 +1,10 @@
 const { Router } = require('express');
 const { adminAuthorizationMiddleware } = require('../middlewear');
-const { createNotice, getNotices } = require('../controllers/noticeController');
+const {
+  createNotice,
+  getNotices,
+  getNoticesById,
+} = require('../controllers/noticeController');
 
 const noticesRouter = Router();
 
@@ -9,4 +13,7 @@ noticesRouter
   .post(adminAuthorizationMiddleware, createNotice)
   .get(getNotices);
 
+noticesRouter.route('/:noticeId').get(getNoticesById);
+
 module.exports = noticesRouter;
+``;
