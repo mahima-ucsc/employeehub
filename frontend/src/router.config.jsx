@@ -16,6 +16,7 @@ import NoticeList from "./features/notices/pages/notices-list/notice-list";
 import CreateNotice from "./features/notices/pages/create-notice/create-notice";
 import MyLeaveEdit from "./features/myleaves/pages/my-leave-edit/my-leave-edit";
 import CreateLeave from "./features/myleaves/pages/create-leave/create-leave";
+import NoticeEdit from "./features/notices/pages/edit-notice/edit-notice";
 
 // eslint-disable-next-line no-unused-vars
 function ProtectedLayout() {
@@ -121,6 +122,10 @@ export default createBrowserRouter([
           {
             path: "myleaves/:userId/:leaveId/edit",
             element: <MyLeaveEdit />,
+          },
+          {
+            path: "notices/:noticeId/edit",
+            element: <NoticeEdit />,
           },
         ],
       },
