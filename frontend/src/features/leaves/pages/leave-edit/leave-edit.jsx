@@ -13,6 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import { convertDateStringToYYYYMMDD } from "../../../../common/utils";
 
 const Button = styled.button.attrs({
   className: "btn btn-block form-btn",
@@ -53,7 +54,11 @@ const LeaveEdit = () => {
 
   useEffect(() => {
     if (leave) {
-      reset(leave);
+      reset({
+        startDate : convertDateStringToYYYYMMDD(leave.startDate),
+        endDate: convertDateStringToYYYYMMDD(leave.endDate),
+        description: leave.description
+      });
     }
   }, [leave, reset]);
 
