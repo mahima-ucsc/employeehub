@@ -4,8 +4,9 @@ import { useAxios } from "../../../common/hooks";
 const useGetLeaveById = (employeeId, leaveId) => {
   const { instance } = useAxios();
 
-  const getLeaveById = () => {
-    return instance.get(`leaves/${employeeId}/${leaveId}`);
+  const getLeaveById = async () => {
+    const { data } = await instance.get(`leaves/${employeeId}/${leaveId}`);
+    return data;
   };
 
   return useQuery({

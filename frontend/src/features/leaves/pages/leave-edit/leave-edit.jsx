@@ -53,7 +53,11 @@ const LeaveEdit = () => {
 
   useEffect(() => {
     if (leave) {
-      reset(leave);
+      reset({
+        startDate : (new Date(leave.startDate)).toISOString().slice(0, 10),
+        endDate: (new Date(leave.endDate)).toISOString().slice(0, 10),
+        description: leave.description
+      });
     }
   }, [leave, reset]);
 
