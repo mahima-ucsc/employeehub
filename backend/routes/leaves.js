@@ -6,6 +6,7 @@ const {
   getLeaveByEmployeeId,
   updateLeaveDateById,
   deleteLeaveById,
+  updateLeaveStatusById,
 } = require('../controllers/leaveController');
 const {
   adminOrSelfAuthorizationMiddleware,
@@ -35,5 +36,9 @@ leavesRouter
 leavesRouter
   .route('/:userId/:leaveId')
   .get(adminOrSelfAuthorizationMiddleware, getLeaveByEmployeeId);
+
+leavesRouter
+  .route('/:userId/:leaveId/:status')
+  .patch(adminAuthorizationMiddleware, updateLeaveStatusById);
 
 module.exports = leavesRouter;
