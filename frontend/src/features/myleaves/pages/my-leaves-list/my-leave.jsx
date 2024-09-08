@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useDeleteMyLeaveById } from "../../hooks";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const Wrapper = styled.article`
   background: var(--background-secondary-color);
@@ -71,11 +74,25 @@ const Leave = ({
   employeeId,
   description,
   status,
-  employeeName,
 }) => {
+  const { mutate: deleteMyLeaveById } = useDeleteMyLeaveById();
+  const queryClient = useQueryClient();
   const statusClass = status;
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    deleteMyLeaveById(
+      { employeeId, leaveId },
+      {
+        onSuccess: () => {
+          toast.success("Leave deleted successfully");
+          queryClient.invalidateQueries("myleaves");
+        },
+        onError: (err) => {
+          toast.error(err.response.data.msg);
+        },
+      }
+    );
+  };
 
   return (
     <Wrapper>
