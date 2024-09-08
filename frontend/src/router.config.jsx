@@ -14,6 +14,7 @@ import LeaveEdit from "./features/leaves/pages/leave-edit/leave-edit";
 import MyLeaveList from "./features/myleaves/pages/my-leaves-list/my-leaves-list";
 import NoticeList from "./features/notices/pages/notices-list/notice-list";
 import CreateNotice from "./features/notices/pages/create-notice/create-notice";
+import MyLeaveEdit from "./features/myleaves/pages/my-leave-edit/my-leave-edit";
 import CreateLeave from "./features/myleaves/pages/create-leave/create-leave";
 
 // eslint-disable-next-line no-unused-vars
@@ -116,6 +117,10 @@ export default createBrowserRouter([
           {
             path: "notices/create",
             element: <CreateNotice />,
+          },
+          {
+            path: "myleaves/:userId/:leaveId/edit",
+            element: <MyLeaveEdit />,
           },
         ],
       },
