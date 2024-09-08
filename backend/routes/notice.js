@@ -18,6 +18,8 @@ noticesRouter
 
 noticesRouter.route('/:noticeId').get(getNoticesById);
 
-noticesRouter.route('/:noticeId').patch(updateNoticesById);
+noticesRouter
+  .route('/:noticeId')
+  .patch(adminAuthorizationMiddleware, updateNoticesById);
 
 module.exports = noticesRouter;
