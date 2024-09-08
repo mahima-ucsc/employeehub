@@ -65,7 +65,7 @@ const updateNoticesById = async (req, res) => {
     _id: req.params.noticeId,
   });
 
-  if (!notice) throw new NotFoundError('Invalid user id.');
+  if (!notice) throw new NotFoundError('Notice ID not found.');
 
   notice.title = req.body.title || notice.title;
   notice.description = req.body.description || notice.description;
