@@ -35,6 +35,8 @@ const getNoticesById = async (req, res) => {
     _id: req.params.noticeId,
   });
 
+  if (!result) throw new NotFoundError('Notice not found.');
+
   let notice = {
     title: result.title,
     description: result.description,
