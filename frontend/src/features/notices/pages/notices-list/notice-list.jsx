@@ -3,6 +3,9 @@ import { useGetNotices } from "../../hooks";
 import Notice from "./notice";
 import { useAuth } from "../../../../common/hooks";
 import { Link } from "react-router-dom";
+import { useCleanNoticeBoard } from "../../hooks";
+import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Wrapper = styled.section`
   margin-top: 4rem;
@@ -43,7 +46,24 @@ const Wrapper = styled.section`
 
 const Header = () => {
   const { user } = useAuth();
-  const handleCleanNoticeBoard = () => {};
+  const { mutate: cleanNoticeBoard } = useCleanNoticeBoard();
+  const queryClient = useQueryClient();
+
+  const handleCleanNoticeBoard = () => {
+    cleanNoticeBoard(
+      {},
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries("notices");
+          toast.success("Noticeboard was cleaned successfully");
+        },
+        onError: (err) => {
+          toast.error(err.response.data.msg);
+        },
+      }
+    );
+  };
+
   return (
     <div className="header">
       <h3>Notice Board</h3>
