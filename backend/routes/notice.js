@@ -6,6 +6,7 @@ const {
   getNoticesById,
   deleteAllNotices,
   updateNoticesById,
+  deleteNoticeById,
 } = require('../controllers/noticeController');
 
 const noticesRouter = Router();
@@ -21,5 +22,9 @@ noticesRouter.route('/:noticeId').get(getNoticesById);
 noticesRouter
   .route('/:noticeId')
   .patch(adminAuthorizationMiddleware, updateNoticesById);
+
+noticesRouter
+  .route('/:noticeId')
+  .delete(adminAuthorizationMiddleware, deleteNoticeById);
 
 module.exports = noticesRouter;
