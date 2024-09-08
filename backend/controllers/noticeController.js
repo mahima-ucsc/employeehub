@@ -58,6 +58,19 @@ const deleteAllNotices = async (req, res) => {
     .json({ message: 'All notices have been deleted.' });
 };
 
+const deleteNoticeById = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.noticeId))
+    throw new NotFoundError('Invalid notice Id.');
+  let notice = await Notice.findOne({
+    _id: req.params.noticeId,
+  });
+
+  if (!notice) throw new NotFoundError('Notice Id not found.');
+
+  await notice.deleteOne();
+  res.status(StatusCodes.OK).send();
+};
+
 const updateNoticesById = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.noticeId))
     throw new NotFoundError('Invalid notice id.');
@@ -84,4 +97,5 @@ module.exports = {
   getNoticesById,
   deleteAllNotices,
   updateNoticesById,
+  deleteNoticeById,
 };
