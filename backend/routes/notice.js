@@ -13,7 +13,7 @@ noticesRouter
   .route('/')
   .post(adminAuthorizationMiddleware, createNotice)
   .get(getNotices)
-  .delete(deleteAllNotices);
+  .delete(adminAuthorizationMiddleware, deleteAllNotices);
 
 noticesRouter.route('/:noticeId').get(getNoticesById);
 
