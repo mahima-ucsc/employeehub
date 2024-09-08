@@ -4,6 +4,7 @@ const { attachCookie } = require('../utils');
 const { userRoles } = require('../constants');
 const { NotFoundError } = require('../errors');
 const { default: mongoose } = require('mongoose');
+const Leave = require('../models/Leave');
 
 const register = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -106,6 +107,10 @@ const deleteEmployeeById = async (req, res) => {
   });
 
   if (!user) throw new NotFoundError('Invalid user id.');
+
+  await Leave.deleteMany({
+    employee: req.params.userId,
+  });
 
   await user.deleteOne();
   res.status(StatusCodes.OK).send();
