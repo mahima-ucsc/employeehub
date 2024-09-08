@@ -1,5 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const { Notice } = require('../models');
+const { default: mongoose } = require('mongoose');
+const { NotFoundError } = require('../errors');
 
 const createNotice = async (req, res) => {
   const { title, description } = req.body;
@@ -25,7 +27,25 @@ const getNotices = async (req, res) => {
   res.status(StatusCodes.OK).json(notices);
 };
 
+const getNoticesById = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.noticeId))
+    throw new NotFoundError('Invalid notice id.');
+
+  let result = await Notice.findOne({
+    _id: req.params.noticeId,
+  });
+
+  let notice = {
+    title: result.title,
+    description: result.description,
+    id: result._id,
+  };
+
+  res.status(StatusCodes.OK).json(notice);
+};
+
 module.exports = {
   createNotice,
   getNotices,
+  getNoticesById,
 };
