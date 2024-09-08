@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../../../../common/hooks";
+import useDeleteNoticeById from "../../../notices/hooks/delete-notice";
+import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Wrapper = styled.article`
   background: var(--background-secondary-color);
@@ -45,7 +48,19 @@ const Wrapper = styled.article`
 
 const Notice = ({ title, description, id }) => {
   const { user } = useAuth();
-  const handleDelete = () => {};
+  const { mutate: deleteNoticeById } = useDeleteNoticeById();
+  const queryClient = useQueryClient();
+  const handleDelete = () => {
+    deleteNoticeById(id, {
+      onSuccess: () => {
+        toast.success("Notice deleted successfully");
+        queryClient.invalidateQueries("notices");
+      },
+      onError: (err) => {
+        toast.error(err.response.data.msg);
+      },
+    });
+  };
 
   return (
     <Wrapper>
