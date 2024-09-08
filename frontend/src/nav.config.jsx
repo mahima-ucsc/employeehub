@@ -1,5 +1,5 @@
 import { ImProfile, ImCalendar } from "react-icons/im";
-import { MdPeople } from "react-icons/md";
+import { MdCalendarToday, MdPeople } from "react-icons/md";
 
 const links = [
   {
@@ -18,6 +18,11 @@ const links = [
     path: "leaves",
     icon: <ImCalendar />,
   },
+  {
+    text: "My leaves",
+    path: "myleaves",
+    icon: <MdCalendarToday />, 
+  }
 ];
 
 export default links;
