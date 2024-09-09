@@ -58,9 +58,44 @@ const deleteAllNotices = async (req, res) => {
     .json({ message: 'All notices have been deleted.' });
 };
 
+const deleteNoticeById = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.noticeId))
+    throw new NotFoundError('Invalid notice Id.');
+  let notice = await Notice.findOne({
+    _id: req.params.noticeId,
+  });
+
+  if (!notice) throw new NotFoundError('Notice Id not found.');
+
+  await notice.deleteOne();
+  res.status(StatusCodes.OK).send();
+};
+
+const updateNoticesById = async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.noticeId))
+    throw new NotFoundError('Invalid notice id.');
+  let notice = await Notice.findOne({
+    _id: req.params.noticeId,
+  });
+
+  if (!notice) throw new NotFoundError('Notice ID not found.');
+
+  notice.title = req.body.title || notice.title;
+  notice.description = req.body.description || notice.description;
+
+  const result = await notice.save();
+  res.status(StatusCodes.OK).json({
+    title: result.title,
+    description: result.description,
+    id: result._id,
+  });
+};
+
 module.exports = {
   createNotice,
   getNotices,
   getNoticesById,
   deleteAllNotices,
+  updateNoticesById,
+  deleteNoticeById,
 };
